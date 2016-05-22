@@ -4,7 +4,11 @@ var gameport = document.getElementById("gameport");
 var renderer = PIXI.autoDetectRenderer(400, 400, {backgroundColor: 0x3344ee});
 gameport.appendChild(renderer.view);
 
+var background = PIXI.Sprite.fromImage("./assets/img/wood_BG.jpg");
+
 var stage = new PIXI.Container();
+
+stage.addChild(background);
 
 var texture = PIXI.Texture.fromImage("./assets/img/cs413.png");
 
