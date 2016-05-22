@@ -10,22 +10,34 @@ var stage = new PIXI.Container();
 
 stage.addChild(background);
 
-var texture = PIXI.Texture.fromImage("./assets/img/cs413.png");
+PIXI.loader
+  .add('./assets/img/tiles.json')
+  .load(ready);
 
-var sprite = new PIXI.Sprite(texture);
-
-sprite.anchor.x = 0.5;
-sprite.anchor.y = 0.5;
-
-sprite.position.x = 200;
-sprite.position.y = 200;
-
-stage.addChild(sprite);
-
-function animate() {
-  requestAnimationFrame(animate);
-  sprite.rotation += 0.1;
-  renderer.render(stage);
+function ready(){
+  var tilebag = [];
+  var posx = 100;
+  var posy = 100;
+  for (var i=1; i<=15; i++){
+    var tile = new PIXI.extras.TilingSprite(PIXI.Texture.fromFrame('tile' + i + '.png'), 100, 100);
+    tile.anchor.x = 1;
+    tile.anchor.y = 1;
+    tilebag.push(tile);
+    tile.position.x = posx;
+    tile.position.y = posy;
+    stage.addChild(tile);
+    if(posx == 400){
+      posx = 100;
+      posy += 100;
+    }
+    else{
+      posx += 100;
+    }
+  }
 }
 
+function animate(){
+  requestAnimationFrame(animate);
+  renderer.render(stage);
+}
 animate();
