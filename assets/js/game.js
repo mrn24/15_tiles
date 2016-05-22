@@ -7,19 +7,82 @@ gameport.appendChild(renderer.view);
 var background = PIXI.Sprite.fromImage("./assets/img/wood_BG.jpg");
 
 var stage = new PIXI.Container();
-var title = new PIXI.Container();
+
 var game = new PIXI.Container();
+var tilebag = [];
+
 var credits = new PIXI.Container();
+
 var instructions = new PIXI.Container();
 
 stage.addChild(background);
+
+//Create Title Screen
+var title = new PIXI.Container();
+var title1;
+var title5;
+var titlet;
+var titlei;
+var titlel;
+var titlee;
+PIXI.loader
+  .add('./assets/img/title.json')
+  .load(titleLoader)
+title.interactive = true;
+title.on('mousedown', startMenu);
 stage.addChild(title);
 
-PIXI.loader
-  .add('./assets/img/tiles.json')
-  .load(ready);
+function titleLoader(){
+  title1 = new PIXI.extras.TilingSprite(PIXI.Texture.fromFrame('title1.png'), 100, 100);
+  title1.anchor.x = 1;
+  title1.anchor.y = 1;
+  title1.position.x = 200;
+  title1.position.y = 150;
+  title.addChild(title1);
+  title5 = new PIXI.extras.TilingSprite(PIXI.Texture.fromFrame('title5.png'), 100, 100);
+  title5.anchor.x = 1;
+  title5.anchor.y = 1;
+  title5.position.x = 300;
+  title5.position.y = 150;
+  title.addChild(title5);
+  titlet = new PIXI.extras.TilingSprite(PIXI.Texture.fromFrame('titlet.png'), 100, 100);
+  titlet.anchor.x = 1;
+  titlet.anchor.y = 1;
+  titlet.position.x = 100;
+  titlet.position.y = 250;
+  title.addChild(titlet);
+  titlei = new PIXI.extras.TilingSprite(PIXI.Texture.fromFrame('titlei.png'), 100, 100);
+  titlei.anchor.x = 1;
+  titlei.anchor.y = 1;
+  titlei.position.x = 200;
+  titlei.position.y = 250;
+  title.addChild(titlei);
+  titlel = new PIXI.extras.TilingSprite(PIXI.Texture.fromFrame('titlel.png'), 100, 100);
+  titlel.anchor.x = 1;
+  titlel.anchor.y = 1;
+  titlel.position.x = 300;
+  titlel.position.y = 250;
+  title.addChild(titlel);
+  titlee = new PIXI.extras.TilingSprite(PIXI.Texture.fromFrame('titlee.png'), 100, 100);
+  titlee.anchor.x = 1;
+  titlee.anchor.y = 1;
+  titlee.position.x = 400;
+  titlee.position.y = 250;
+  title.addChild(titlee);
+}
 
-var tilebag = [];
+
+function startGame(e){
+  title.removeChildren();
+  stage.removeChild(title);
+  stage.addChild(game);
+
+  PIXI.loader
+    .add('./assets/img/tiles.json')
+    .load(ready);
+  }
+
+
 
 function ready(){
   var posx = 100;
@@ -116,7 +179,7 @@ function tileMove(t, m){
       console.log("Not a good move");
       break;
   }
-  createjs.Tween.get(target.position).to({x: new_x, y: new_y}, 100);
+  createjs.Tween.get(t.position).to({x: new_x, y: new_y}, 100);
 }
 
 function tileHandler(e){
@@ -126,6 +189,34 @@ function tileHandler(e){
   //console.log(this.x);
 }
 
+function startMenu(e){
+  createjs.Tween.get(title1.position).to({x: 200, y: 100}, 100);
+  createjs.Tween.get(title5.position).to({x: 300, y: 100}, 100);
+  createjs.Tween.get(titlet.position).to({x: 100, y: 200}, 100);
+  createjs.Tween.get(titlei.position).to({x: 100, y: 400}, 100);
+  createjs.Tween.get(titlel.position).to({x: 400, y: 400}, 100);
+  createjs.Tween.get(titlee.position).to({x: 400, y: 200}, 100);
+  var playButton = PIXI.Sprite.fromImage("./assets/img/playButton.png");
+  playButton.anchor.x = 0.5;
+  playButton.anchor.y = 0;
+  playButton.position.x = 200;
+  playButton.position.y = 125;
+  playButton.interactive = true;
+  playButton.on('mousedown', startGame);
+  title.addChild(playButton);
+  var instructions = PIXI.Sprite.fromImage("./assets/img/instructions.png");
+  instructions.anchor.x = 0.5;
+  instructions.anchor.y = 0;
+  instructions.position.x = 200;
+  instructions.position.y = 200;
+  title.addChild(instructions);
+  var credits = PIXI.Sprite.fromImage("./assets/img/credits.png");
+  credits.anchor.x = 0.5;
+  credits.anchor.y = 0;
+  credits.position.x = 200;
+  credits.position.y = 275;
+  title.addChild(credits);
+}
 
 
 function animate(){

@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>4.2.1</string>
         <key>fileName</key>
-        <string>M:/Documents/CS Stuff/cs413/project_2/assets/img/tiles.tps</string>
+        <string>M:/Documents/CS Stuff/cs413/project_2/assets/img/title.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -141,7 +141,7 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>tiles.json</filename>
+                <filename>title.json</filename>
             </struct>
         </map>
         <key>multiPack</key>
@@ -188,21 +188,12 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../../Expression/Expression Design/tile1.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile10.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile11.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile12.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile13.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile14.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile15.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile2.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile3.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile4.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile5.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile6.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile7.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile8.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/tile9.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/title1.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/title5.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/titlee.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/titlei.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/titlel.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/titlet.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -210,21 +201,12 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../../../Expression/Expression Design/tile1.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile2.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile3.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile4.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile5.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile6.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile7.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile8.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile9.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile10.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile11.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile12.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile13.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile14.png</filename>
-            <filename>../../../../../Expression/Expression Design/tile15.png</filename>
+            <filename>../../../../../Expression/Expression Design/title1.png</filename>
+            <filename>../../../../../Expression/Expression Design/title5.png</filename>
+            <filename>../../../../../Expression/Expression Design/titlee.png</filename>
+            <filename>../../../../../Expression/Expression Design/titlei.png</filename>
+            <filename>../../../../../Expression/Expression Design/titlel.png</filename>
+            <filename>../../../../../Expression/Expression Design/titlet.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
