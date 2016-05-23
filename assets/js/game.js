@@ -15,6 +15,8 @@ var credits = new PIXI.Container();
 
 var instructions = new PIXI.Container();
 
+var winScreen = new PIXI.Container();
+
 stage.addChild(background);
 
 //Create Title Screen
@@ -91,19 +93,61 @@ function ready(){
     var tile = new PIXI.extras.TilingSprite(PIXI.Texture.fromFrame('tile' + i + '.png'), 100, 100);
     tile.anchor.x = 1;
     tile.anchor.y = 1;
+    tile.position.x = posx;
+    tile.position.y = posy;
     tile.interactive = true;
     tile.on('mousedown', tileHandler);
     tilebag.push(tile);
-    tile.position.x = posx;
-    tile.position.y = posy;
     game.addChild(tile);
-    if(posx == 400){
+    if (posx == 400){
       posx = 100;
       posy += 100;
     }
     else{
       posx += 100;
     }
+  }
+  //shuffleBoard();
+}
+
+function shuffleBoard(){
+  var currentIndex = tilebag.length - 1;
+  var randomIndex;
+  var new_x;
+  var new_y;
+
+  while(0 <= currentIndex){
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    setTimeout(shuffleHelp(currentIndex, randomIndex), 1000);
+    currentIndex--;
+  }
+}
+
+function shuffleHelp(currentIndex, randomIndex){
+  new_x = tilebag[currentIndex].position.x;
+  new_y = tilebag[currentIndex].position.y;
+  createjs.Tween.get(tilebag[currentIndex]).to({x: tilebag[randomIndex].position.x, y: tilebag[randomIndex].position.y}, 1000);
+  createjs.Tween.get(tilebag[randomIndex]).to({x: new_x, y: new_y}, 500);
+}
+
+function checkWin(){
+  var posx = 100;
+  var posy = 100;
+  var isWin = true;
+  for (i=0; i<15; i++){
+    if(tilebag[i].position.x != posx || tilebag[i].position.y != posy){
+      isWin = false;
+    }
+    if (posx == 400){
+      posx = 100;
+      posy += 100;
+    }
+    else{
+      posx += 100;
+    }
+  }
+  if(isWin){
+    console.log("Win!");
   }
 }
 
@@ -186,6 +230,7 @@ function tileHandler(e){
   //var target = event.getCurrentTarget();
   var move = checkFree(this);
   tileMove(this, move);
+  checkWin();
   //console.log(this.x);
 }
 
