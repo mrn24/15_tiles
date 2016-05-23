@@ -188,12 +188,13 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">../../../../../Expression/Expression Design/title1.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/title5.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/titlee.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/titlei.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/titlel.png</key>
-            <key type="filename">../../../../../Expression/Expression Design/titlet.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/tile1.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/tile5.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/tilee.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/tilei.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/tilel.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/tiles.png</key>
+            <key type="filename">../../../../../Expression/Expression Design/tilet.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -201,12 +202,13 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>../../../../../Expression/Expression Design/title1.png</filename>
-            <filename>../../../../../Expression/Expression Design/title5.png</filename>
-            <filename>../../../../../Expression/Expression Design/titlee.png</filename>
-            <filename>../../../../../Expression/Expression Design/titlei.png</filename>
-            <filename>../../../../../Expression/Expression Design/titlel.png</filename>
-            <filename>../../../../../Expression/Expression Design/titlet.png</filename>
+            <filename>../../../../../Expression/Expression Design/tile1.png</filename>
+            <filename>../../../../../Expression/Expression Design/tile5.png</filename>
+            <filename>../../../../../Expression/Expression Design/tilee.png</filename>
+            <filename>../../../../../Expression/Expression Design/tilei.png</filename>
+            <filename>../../../../../Expression/Expression Design/tilel.png</filename>
+            <filename>../../../../../Expression/Expression Design/tiles.png</filename>
+            <filename>../../../../../Expression/Expression Design/tilet.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

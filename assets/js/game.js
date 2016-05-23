@@ -10,10 +10,24 @@ var stage = new PIXI.Container();
 
 var game = new PIXI.Container();
 var tilebag = [];
+var isRunning = false;
+var isLoaded = false;
 
 var credits = new PIXI.Container();
+var credit1;
+var credit2;
+var credit3;
+var credit4;
+var credit5;
 
 var instructions = new PIXI.Container();
+var struct1;
+var struct2;
+var struct3;
+var struct4;
+var struct5;
+
+
 
 var winScreen = new PIXI.Container();
 
@@ -27,12 +41,13 @@ var titlet;
 var titlei;
 var titlel;
 var titlee;
+var titleText;
 PIXI.loader
   .add('./assets/img/title.json')
   .load(titleLoader)
 title.interactive = true;
 title.on('mousedown', startMenu);
-stage.addChild(title);
+
 
 function titleLoader(){
   title1 = new PIXI.extras.TilingSprite(PIXI.Texture.fromFrame('title1.png'), 100, 100);
@@ -71,6 +86,13 @@ function titleLoader(){
   titlee.position.x = 400;
   titlee.position.y = 250;
   title.addChild(titlee);
+  titleText = new PIXI.Text("Click to Continue!", {font: "25px Arial", fill:"yellow"});
+  titleText.anchor.x = 0.5;
+  titleText.anchor.y = 0;
+  titleText.position.x = 200;
+  titleText.position.y = 300;
+  title.addChild(titleText);
+  stage.addChild(title);
 }
 
 
@@ -79,10 +101,16 @@ function startGame(e){
   stage.removeChild(title);
   stage.addChild(game);
 
-  PIXI.loader
-    .add('./assets/img/tiles.json')
-    .load(ready);
+  if(isLoaded){
+    ready();
   }
+  else{
+    isLoaded = true;
+    PIXI.loader
+      .add('./assets/img/tiles.json')
+      .load(ready);
+  }
+}
 
 
 
@@ -108,6 +136,7 @@ function ready(){
     }
   }
   //shuffleBoard();
+  isRunning = true;
 }
 
 function shuffleBoard(){
@@ -118,17 +147,20 @@ function shuffleBoard(){
 
   while(0 <= currentIndex){
     randomIndex = Math.floor(Math.random() * currentIndex);
-    setTimeout(shuffleHelp(currentIndex, randomIndex), 1000);
+    new_x = tilebag[currentIndex].position.x;
+    new_y = tilebag[currentIndex].position.y;
+    tilebag[currentIndex].position.x = tilebag[randomIndex].position.x;
+    tilebag[currentIndex].position.y = tilebag[randomIndex].position.y;
+    tilebag[randomIndex].position.x = new_x;
+    tilebag[randomIndex].position.y = new_y;
+
+    //createjs.Tween.get(tilebag[currentIndex]).to({x: tilebag[randomIndex].position.x, y: tilebag[randomIndex].position.y}, 1000);
+    //createjs.Tween.get(tilebag[randomIndex]).to({x: new_x, y: new_y}, 500);
+
     currentIndex--;
   }
 }
 
-function shuffleHelp(currentIndex, randomIndex){
-  new_x = tilebag[currentIndex].position.x;
-  new_y = tilebag[currentIndex].position.y;
-  createjs.Tween.get(tilebag[currentIndex]).to({x: tilebag[randomIndex].position.x, y: tilebag[randomIndex].position.y}, 1000);
-  createjs.Tween.get(tilebag[randomIndex]).to({x: new_x, y: new_y}, 500);
-}
 
 function checkWin(){
   var posx = 100;
@@ -147,7 +179,8 @@ function checkWin(){
     }
   }
   if(isWin){
-    console.log("Win!");
+    isRunning = false;
+    winScreenMaker();
   }
 }
 
@@ -230,17 +263,17 @@ function tileHandler(e){
   //var target = event.getCurrentTarget();
   var move = checkFree(this);
   tileMove(this, move);
-  checkWin();
   //console.log(this.x);
 }
 
 function startMenu(e){
-  createjs.Tween.get(title1.position).to({x: 200, y: 100}, 100);
-  createjs.Tween.get(title5.position).to({x: 300, y: 100}, 100);
-  createjs.Tween.get(titlet.position).to({x: 100, y: 200}, 100);
-  createjs.Tween.get(titlei.position).to({x: 100, y: 400}, 100);
-  createjs.Tween.get(titlel.position).to({x: 400, y: 400}, 100);
-  createjs.Tween.get(titlee.position).to({x: 400, y: 200}, 100);
+  title.removeChild(titleText);
+  createjs.Tween.get(title1.position).to({x: 200, y: 100}, 400);
+  createjs.Tween.get(title5.position).to({x: 300, y: 100}, 400);
+  createjs.Tween.get(titlet.position).to({x: 100, y: 200}, 400);
+  createjs.Tween.get(titlei.position).to({x: 400, y: 200}, 400);
+  createjs.Tween.get(titlel.position).to({x: 100, y: 400}, 400);
+  createjs.Tween.get(titlee.position).to({x: 400, y: 400}, 400);
   var playButton = PIXI.Sprite.fromImage("./assets/img/playButton.png");
   playButton.anchor.x = 0.5;
   playButton.anchor.y = 0;
@@ -249,23 +282,152 @@ function startMenu(e){
   playButton.interactive = true;
   playButton.on('mousedown', startGame);
   title.addChild(playButton);
-  var instructions = PIXI.Sprite.fromImage("./assets/img/instructions.png");
-  instructions.anchor.x = 0.5;
-  instructions.anchor.y = 0;
-  instructions.position.x = 200;
-  instructions.position.y = 200;
-  title.addChild(instructions);
+  var instructionsB = PIXI.Sprite.fromImage("./assets/img/instructions.png");
+  instructionsB.anchor.x = 0.5;
+  instructionsB.anchor.y = 0;
+  instructionsB.position.x = 200;
+  instructionsB.position.y = 200;
+  instructionsB.interactive = true;
+  instructionsB.on('mousedown', startInstructions);
+  title.addChild(instructionsB);
   var credits = PIXI.Sprite.fromImage("./assets/img/credits.png");
   credits.anchor.x = 0.5;
   credits.anchor.y = 0;
   credits.position.x = 200;
   credits.position.y = 275;
+  credits.interactive = true;
+  credits.on('mousedown', startCredits);
   title.addChild(credits);
 }
+
+function startInstructions(){
+  struct1 = new PIXI.Text("Instructions:", {font: "25px Arial", fill:"yellow"});
+  struct1.anchor.x = .5;
+  struct1.anchor.y = 1;
+  struct1.position.x = 200;
+  struct1.position.y = 50;
+  instructions.addChild(struct1);
+  struct2 = new PIXI.Text("Click on a tile to move it to an adjacent empty space.", {font: "16px Arial", fill:"white"});
+  struct2.anchor.x = .5;
+  struct2.anchor.y = 1;
+  struct2.position.x = 200;
+  struct2.position.y = 100;
+  instructions.addChild(struct2);
+  struct3 = new PIXI.Text("Get all tiles in order from 1 - 15.", {font: "16px Arial", fill:"white"});
+  struct3.anchor.x = .5;
+  struct3.anchor.y = 1;
+  struct3.position.x = 200;
+  struct3.position.y = 150;
+  instructions.addChild(struct3);
+  struct5 = new PIXI.Text("Good Luck!", {font: "16px Arial", fill:"white"});
+  struct5.anchor.x = .5;
+  struct5.anchor.y = 1;
+  struct5.position.x = 200;
+  struct5.position.y = 200;
+  instructions.addChild(struct5);
+  struct4 = new PIXI.Text("Back to Menu", {font: "25px Arial", fill:"Blue"});
+  struct4.anchor.x = .5;
+  struct4.anchor.y = 1;
+  struct4.position.x = 200;
+  struct4.position.y = 250;
+  struct4.interactive = true;
+  struct4.on('mousedown', menuFromStruct);
+  instructions.addChild(struct4);
+  title.removeChildren();
+  stage.removeChild(title);
+  stage.addChild(instructions);
+}
+
+function menuFromStruct(){
+  instructions.removeChildren();
+  stage.removeChild(instructions);
+  titleLoader();
+}
+
+function winScreenMaker(){
+  var playAgain = PIXI.Sprite.fromImage("./assets/img/winRedo.png");
+  playAgain.anchor.x = 0.5;
+  playAgain.anchor.y = 1;
+  playAgain.position.x = 200;
+  playAgain.position.y = 400;
+  playAgain.interactive = true;
+  playAgain.on('mousedown', startGameAgain);
+  winScreen.addChild(playAgain);
+  var winScreenText = new PIXI.Text("You won! Congratulations!", {font: "25px Arial", fill:"yellow"})
+  winScreenText.anchor.x = 0.5;
+  winScreenText.anchor.y = 0;
+  winScreenText.position.x = 200;
+  winScreenText.position.y = 25;
+  winScreen.addChild(winScreenText);
+  var hoegarth = PIXI.Sprite.fromImage("./assets/img/hoegarth.png");
+  hoegarth.anchor.x = 0.5;
+  hoegarth.anchor.y = 1;
+  hoegarth.position.x = 200;
+  hoegarth.position.y = 275;
+  winScreen.addChild(hoegarth);
+  game.removeChildren();
+  stage.removeChild(game);
+  stage.addChild(winScreen);
+}
+
+function startGameAgain(e){
+  winScreen.removeChildren();
+  stage.removeChild(winScreen);
+  titleLoader();
+}
+
+function startCredits(e){
+  credit1 = new PIXI.Text("Matt Nielsen", {font: "25px Arial", fill:"yellow"});
+  credit1.anchor.x = .5;
+  credit1.anchor.y = 1;
+  credit1.position.x = 200;
+  credit1.position.y = 50;
+  credits.addChild(credit1);
+  credit2 = new PIXI.Text("CS 413", {font: "25px Arial", fill:"yellow"});
+  credit2.anchor.x = .5;
+  credit2.anchor.y = 1;
+  credit2.position.x = 200;
+  credit2.position.y = 100;
+  credits.addChild(credit2);
+  credit3 = new PIXI.Text("Project 2 - Puzzles", {font: "25px Arial", fill:"yellow"});
+  credit3.anchor.x = .5;
+  credit3.anchor.y = 1;
+  credit3.position.x = 200;
+  credit3.position.y = 150;
+  credits.addChild(credit3);
+  credit4 = new PIXI.Text("15 Tile", {font: "25px Arial", fill:"yellow"});
+  credit4.anchor.x = .5;
+  credit4.anchor.y = 1;
+  credit4.position.x = 200;
+  credit4.position.y = 200;
+  credits.addChild(credit4);
+  credit5 = new PIXI.Text("Back to Menu", {font: "25px Arial", fill:"Blue"});
+  credit5.anchor.x = .5;
+  credit5.anchor.y = 1;
+  credit5.position.x = 200;
+  credit5.position.y = 250;
+  credit5.interactive = true;
+  credit5.on('mousedown', menuFromCredits);
+  credits.addChild(credit5);
+  title.removeChildren();
+  stage.removeChild(title);
+  stage.addChild(credits);
+}
+
+function menuFromCredits(){
+  credits.removeChildren();
+  stage.removeChild(credits);
+  titleLoader();
+}
+
+
 
 
 function animate(){
   requestAnimationFrame(animate);
+  if(isRunning){
+    checkWin();
+  }
   renderer.render(stage);
 }
 animate();
