@@ -1,18 +1,53 @@
-// Tutorial code from Dr. Palmer's YouTube video : https://www.youtube.com/watch?v=grlg4I-Bt24
+
 var gameport = document.getElementById("gameport");
 
 var renderer = PIXI.autoDetectRenderer(400, 400, {backgroundColor: 0x3344ee});
 gameport.appendChild(renderer.view);
-
+//That nice wood finish
 var background = PIXI.Sprite.fromImage("./assets/img/wood_BG.jpg");
-
+//Make stage
 var stage = new PIXI.Container();
+stage.addChild(background);
 
+//Load/store all sound elements.
+var blip1;
+var blip2;
+var blip3;
+var blip4;
+var blip5;
+var badMoveSound;
+var winTheme;
+var blipCount = 1;
+var startSound;
+PIXI.loader
+  .add("./assets/sound/Powerup5.mp3")
+  .add("./assets/sound/Powerup3.mp3")
+  .add("./assets/sound/Explosion5.mp3")
+  .add("./assets/sound/Blip_Select.mp3")
+  .add("./assets/sound/Blip_Select2.mp3")
+  .add("./assets/sound/Blip_Select3.mp3")
+  .add("./assets/sound/Blip_Select4.mp3")
+  .add("./assets/sound/Blip_Select5.mp3")
+  .load(soundLoader);
+function soundLoader(){
+  blip1 = PIXI.audioManager.getAudio("./assets/sound/Blip_Select.mp3");
+  blip2 = PIXI.audioManager.getAudio("./assets/sound/Blip_Select2.mp3");
+  blip3 = PIXI.audioManager.getAudio("./assets/sound/Blip_Select3.mp3");
+  blip4 = PIXI.audioManager.getAudio("./assets/sound/Blip_Select4.mp3");
+  blip5 = PIXI.audioManager.getAudio("./assets/sound/Blip_Select5.mp3");
+  startSound = PIXI.audioManager.getAudio("./assets/sound/Powerup5.mp3");
+  winTheme = PIXI.audioManager.getAudio("./assets/sound/Powerup3.mp3");
+  badMoveSound = PIXI.audioManager.getAudio("./assets/sound/Explosion5.mp3");
+}
+
+//Game screen with globals
 var game = new PIXI.Container();
 var tilebag = [];
 var isRunning = false;
 var isLoaded = false;
+var validMove = true;
 
+//credits screen with globals
 var credits = new PIXI.Container();
 var credit1;
 var credit2;
@@ -20,6 +55,7 @@ var credit3;
 var credit4;
 var credit5;
 
+//Instruction screen and globals
 var instructions = new PIXI.Container();
 var struct1;
 var struct2;
@@ -27,13 +63,10 @@ var struct3;
 var struct4;
 var struct5;
 
-
-
+//Win screen
 var winScreen = new PIXI.Container();
 
-stage.addChild(background);
-
-//Create Title Screen
+//Create Title Screen and globals
 var title = new PIXI.Container();
 var title1;
 var title5;
@@ -42,13 +75,15 @@ var titlei;
 var titlel;
 var titlee;
 var titleText;
+
+//Load title sheet
 PIXI.loader
   .add('./assets/img/title.json')
   .load(titleLoader)
 title.interactive = true;
 title.on('mousedown', startMenu);
 
-
+//Load up title screen
 function titleLoader(){
   title1 = new PIXI.extras.TilingSprite(PIXI.Texture.fromFrame('title1.png'), 100, 100);
   title1.anchor.x = 1;
@@ -95,12 +130,13 @@ function titleLoader(){
   stage.addChild(title);
 }
 
-
+//Move from title to game
 function startGame(e){
   title.removeChildren();
   stage.removeChild(title);
   stage.addChild(game);
 
+  //load game spritesheet, for'd to catch reloads.
   if(isLoaded){
     ready();
   }
@@ -112,8 +148,7 @@ function startGame(e){
   }
 }
 
-
-
+//load tiles, set them on the board and put them in tilebag
 function ready(){
   var posx = 100;
   var posy = 100;
@@ -135,10 +170,11 @@ function ready(){
       posx += 100;
     }
   }
-  //shuffleBoard();
+  shuffleBoard();
   isRunning = true;
 }
 
+//Function to shuffle the pieces
 function shuffleBoard(){
   var currentIndex = tilebag.length - 1;
   var randomIndex;
@@ -153,15 +189,15 @@ function shuffleBoard(){
     tilebag[currentIndex].position.y = tilebag[randomIndex].position.y;
     tilebag[randomIndex].position.x = new_x;
     tilebag[randomIndex].position.y = new_y;
+    currentIndex--;
 
+    //Tween didn't work with this. Made the tiles stack
     //createjs.Tween.get(tilebag[currentIndex]).to({x: tilebag[randomIndex].position.x, y: tilebag[randomIndex].position.y}, 1000);
     //createjs.Tween.get(tilebag[randomIndex]).to({x: new_x, y: new_y}, 500);
-
-    currentIndex--;
   }
 }
 
-
+//Check for the tiles in the right order
 function checkWin(){
   var posx = 100;
   var posy = 100;
@@ -184,6 +220,7 @@ function checkWin(){
   }
 }
 
+//Check for free space adjacent to targeted tile and returns direction.
 function checkFree(target){
   var freeNorth = true;
   var freeSouth = true;
@@ -232,6 +269,8 @@ function checkFree(target){
   }
 }
 
+//Take a tile and a direction, tween it to the right direction.
+//cycle through some blips for sound FX
 function tileMove(t, m){
   switch(m){
     case 1:
@@ -253,20 +292,51 @@ function tileMove(t, m){
     case 0:
       var new_x = t.position.x;
       var new_y = t.position.y;
-      console.log("Not a good move");
+      validMove = false;
+      badMoveSound.play();
       break;
   }
   createjs.Tween.get(t.position).to({x: new_x, y: new_y}, 100);
+  if (validMove){
+    switch(blipCount){
+      case 1:
+        blip1.play();
+        blipCount++;
+        break;
+      case 2:
+        blip2.play();
+        blipCount++;
+        break;
+      case 3:
+        blip3.play();
+        blipCount++;
+        break;
+      case 4:
+        blip4.play();
+        blipCount++;
+        break;
+      case 5:
+        blip5.play();
+        blipCount=1;
+        break;
+      }
+    }
+    else{
+      validMove = true;
+    }
 }
 
+//Handles clicks, sends to checkfree, then move functions.
 function tileHandler(e){
-  //var target = event.getCurrentTarget();
   var move = checkFree(this);
   tileMove(this, move);
-  //console.log(this.x);
 }
 
+//Changes the title screen to the start menu.
+//Tween the tiles around and make the menu buttons.
+//Play cool sound. Get rid of text.
 function startMenu(e){
+  startSound.play();
   title.removeChild(titleText);
   createjs.Tween.get(title1.position).to({x: 200, y: 100}, 400);
   createjs.Tween.get(title5.position).to({x: 300, y: 100}, 400);
@@ -300,6 +370,7 @@ function startMenu(e){
   title.addChild(credits);
 }
 
+//Load and stage the instructions screen.
 function startInstructions(){
   struct1 = new PIXI.Text("Instructions:", {font: "25px Arial", fill:"yellow"});
   struct1.anchor.x = .5;
@@ -338,12 +409,15 @@ function startInstructions(){
   stage.addChild(instructions);
 }
 
+//Go back to the title screen from instructions screen
 function menuFromStruct(){
   instructions.removeChildren();
   stage.removeChild(instructions);
   titleLoader();
 }
 
+//Make the win Screen. Bring Hoegarth back!
+//Play more cool sounds!
 function winScreenMaker(){
   var playAgain = PIXI.Sprite.fromImage("./assets/img/winRedo.png");
   playAgain.anchor.x = 0.5;
@@ -368,23 +442,32 @@ function winScreenMaker(){
   game.removeChildren();
   stage.removeChild(game);
   stage.addChild(winScreen);
+  winTheme.play();
 }
 
+//Load title from win screen
 function startGameAgain(e){
   winScreen.removeChildren();
   stage.removeChild(winScreen);
   titleLoader();
 }
 
+//Load credits page
 function startCredits(e){
-  credit1 = new PIXI.Text("Matt Nielsen", {font: "25px Arial", fill:"yellow"});
-  credit1.anchor.x = .5;
+  credit1 = new PIXI.Text("att", {font: "25px Arial", fill:"yellow"});
+  credit1.anchor.x = 0;
+  credit1.anchor.y = 1;
+  credit1.position.x = 150;
+  credit1.position.y = 50;
+  credits.addChild(credit1);
+  credit1a = new PIXI.Text("ielsen", {font: "25px Arial", fill:"yellow"});
+  credit1.anchor.x = 0;
   credit1.anchor.y = 1;
   credit1.position.x = 200;
   credit1.position.y = 50;
   credits.addChild(credit1);
   credit2 = new PIXI.Text("CS 413", {font: "25px Arial", fill:"yellow"});
-  credit2.anchor.x = .5;
+  credit2.anchor.x = 0.5;
   credit2.anchor.y = 1;
   credit2.position.x = 200;
   credit2.position.y = 100;
@@ -414,15 +497,14 @@ function startCredits(e){
   stage.addChild(credits);
 }
 
+//Back to title from credits
 function menuFromCredits(){
   credits.removeChildren();
   stage.removeChild(credits);
   titleLoader();
 }
 
-
-
-
+//Keep things running and check for win conditions
 function animate(){
   requestAnimationFrame(animate);
   if(isRunning){
